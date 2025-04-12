@@ -1,0 +1,6 @@
+backend/docs
+*/node_modules
+*/dist
+
+*/.vscode
+frontend/.angular

@@ -1,0 +1,16 @@
+{
+    "entryFile": "src/server.ts",
+    "controllerPathGlobs": ["./src/**/*.controller.ts"],
+    "spec": {
+      "outputDirectory": "./docs",
+      "specVersion": 3,
+      "spec": {
+        "servers": [
+          {
+            "url": "http://localhost:8080",
+            "description": "Local server"
+          }
+        ]
+      }
+    }
+  }
