@@ -19,10 +19,22 @@ const taskController = container.get<TaskController>(INTERFACE_TYPE.TaskControll
 const taskRouter: Router = Router();
 
 taskRouter.get('/', async (req: Request, resp: Response, next: NextFunction) => {
-    return taskController.onGetTasks(1, 2);
+    const limit = +(req.query.limit || '10');
+    const page = +(req.query.page || '0');
+    try {
+        const responseData = await taskController.onGetTasks(page, limit);
+        resp.status(200).json(responseData)
+    } catch (error) {
+        next(error)
+    }
 })
 taskRouter.patch('/:id', async (req: Request, resp: Response, next: NextFunction) => {
-    return taskController.onUpdateTask(+req.params.id, req.body);
+    try {
+        const responseData = await taskController.onUpdateTask(+req.params.id, req.body);
+        resp.status(200).json(responseData)
+    } catch (error) {
+        next(error)
+    }
 })
 taskRouter.post('/', async (req: Request, resp: Response, next: NextFunction) => {
     try {
@@ -33,7 +45,12 @@ taskRouter.post('/', async (req: Request, resp: Response, next: NextFunction) =>
     }
 })
 taskRouter.delete('/:id', async (req: Request, resp: Response, next: NextFunction) => {
-    return taskController.onDeleteTask(+req.params.id);
+    try {
+        const responseData = await taskController.onDeleteTask(+req.params.id);
+        resp.status(204).json(responseData)
+    } catch (error) {
+        next(error)
+    }
 })
 
 export default taskRouter;

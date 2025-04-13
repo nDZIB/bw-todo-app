@@ -29,6 +29,12 @@ export class TaskInteractor implements ITaskInteractor {
         throw new Error("Method not implemented.");
     }
     async getTasks(page: number, limit: number): Promise<Paginated<TaskDTO>> {
-        throw new Error ('not implemented');
+        const [tasks, total] =  await this.taskRepository.getTasks(page, limit);
+        return {
+            data: tasks.map(task => plainToClass(TaskDTO, task)),
+            limit,
+            page,
+            total
+        }
     }
 }

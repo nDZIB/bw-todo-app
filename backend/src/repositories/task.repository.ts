@@ -19,7 +19,10 @@ export class TaskRepository implements ICrudeRepository<Task> {
     deleteTask(data: any): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    getTasks(page: number, limit: number): Promise<Task[]> {
-        throw new Error("Method not implemented.");
+    getTasks(page: number, limit: number): Promise<[Task[], number]> {
+        return typeormRepo.findAndCount({
+            skip: limit*page,
+            take: limit
+        })
     }
 }

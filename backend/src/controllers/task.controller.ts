@@ -29,10 +29,10 @@ export class TaskController extends Controller {
     }
 
     @Get('/')
-    async onGetTasks(@Query('page') page: number, @Query('limit') limit: number) {
+    async onGetTasks(@Query('page') page: number=0, @Query('limit') limit: number=10) {
         try {
             const responseData = await this.taskInteractor.getTasks(page, limit);
-            return { task: responseData }
+            return responseData
         } catch (error) {
             throw error;
         }
