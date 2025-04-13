@@ -1,0 +1,7 @@
+.input {
+    @apply flex flex-col;
+
+    &-field {
+        @apply border  ;
+    }
+}
