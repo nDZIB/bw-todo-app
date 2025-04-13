@@ -39,7 +39,7 @@ export class TaskController extends Controller {
     }
 
     @Patch('/:id')
-    async onUpdateTask(@Path('id') taskId: number, @Body() data: any) {
+    async onUpdateTask(@Path('id') taskId: number, @Body() data: CreateTaskDTO) {
         try {
             const responseData = await this.taskInteractor.updateTask(taskId, data);
             return { task: responseData }

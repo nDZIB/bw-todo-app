@@ -22,8 +22,15 @@ export class TaskInteractor implements ITaskInteractor {
         return plainToClass(TaskDTO, savedTask);
     }
 
-    updateTask(taskId: number, data: any): Promise<any> {
-        throw new Error("Method not implemented.");
+    async updateTask(taskId: number, data: CreateTaskDTO): Promise<TaskDTO> {
+        const task = await this.taskRepository.getTaskById(taskId);
+        if(task) {
+            const updatedTask = await this.taskRepository.updateTask(taskId, data);
+            return plainToClass(TaskDTO, updatedTask);
+        } else {
+            // if task does not exist by id throw error
+            throw new Error('Task not found')
+        }
     }
     deleteTask(data: any): Promise<void> {
         throw new Error("Method not implemented.");

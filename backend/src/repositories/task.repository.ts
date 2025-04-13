@@ -13,16 +13,24 @@ export class TaskRepository implements ICrudeRepository<Task> {
     async addTask(data: Task): Promise<Task> {
         return typeormRepo.save(data)
     }
-    updateTask(itemId: number, data: any): Promise<Task> {
-        throw new Error("Method not implemented.");
+    async updateTask(taskId: number, data: any): Promise<Task> {
+        await typeormRepo.update({
+            id: taskId
+        }, data)
+
+        return (await typeormRepo.findOneBy({ id: taskId }))!
     }
     deleteTask(data: any): Promise<void> {
         throw new Error("Method not implemented.");
     }
     getTasks(page: number, limit: number): Promise<[Task[], number]> {
         return typeormRepo.findAndCount({
-            skip: limit*page,
+            skip: limit * page,
             take: limit
         })
+    }
+
+    getTaskById(id: number): Promise<Task | null> {
+        return typeormRepo.findOneBy({ id })
     }
 }
