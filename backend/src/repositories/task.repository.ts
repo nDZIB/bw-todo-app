@@ -5,8 +5,6 @@ import { AppDataSource } from "../lib/typeorm/data-source";
 import { User } from "../entities/user.entity";
 
 const typeormRepo = AppDataSource.getRepository(Task)
-const user = AppDataSource.getRepository(User)
-
 
 @injectable()
 export class TaskRepository implements ICrudeRepository<Task> {
@@ -20,17 +18,18 @@ export class TaskRepository implements ICrudeRepository<Task> {
 
         return (await typeormRepo.findOneBy({ id: taskId }))!
     }
-    deleteTask(data: any): Promise<void> {
-        throw new Error("Method not implemented.");
+    async deleteTask(id: number): Promise<void> {
+        await typeormRepo.delete({id})
+        return;
     }
-    getTasks(page: number, limit: number): Promise<[Task[], number]> {
+    async getTasks(page: number, limit: number): Promise<[Task[], number]> {
         return typeormRepo.findAndCount({
             skip: limit * page,
             take: limit
         })
     }
 
-    getTaskById(id: number): Promise<Task | null> {
+    async getTaskById(id: number): Promise<Task | null> {
         return typeormRepo.findOneBy({ id })
     }
 }

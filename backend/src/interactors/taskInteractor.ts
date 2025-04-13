@@ -23,25 +23,32 @@ export class TaskInteractor implements ITaskInteractor {
     }
 
     async updateTask(taskId: number, data: CreateTaskDTO): Promise<TaskDTO> {
-        const task = await this.taskRepository.getTaskById(taskId);
-        if(task) {
-            const updatedTask = await this.taskRepository.updateTask(taskId, data);
-            return plainToClass(TaskDTO, updatedTask);
-        } else {
-            // if task does not exist by id throw error
-            throw new Error('Task not found')
-        }
+        await this.getTask(taskId);
+        const updatedTask = await this.taskRepository.updateTask(taskId, data);
+        return plainToClass(TaskDTO, updatedTask);
     }
-    deleteTask(data: any): Promise<void> {
-        throw new Error("Method not implemented.");
+    async deleteTask(taskId: number): Promise<void> {
+        const task = this.getTask(taskId);
+        await this.taskRepository.deleteTask(taskId);
+        return;
     }
     async getTasks(page: number, limit: number): Promise<Paginated<TaskDTO>> {
-        const [tasks, total] =  await this.taskRepository.getTasks(page, limit);
+        const [tasks, total] = await this.taskRepository.getTasks(page, limit);
         return {
             data: tasks.map(task => plainToClass(TaskDTO, task)),
             limit,
             page,
             total
+        }
+    }
+
+    private async getTask(id: number): Promise<Task> {
+        const task = await this.taskRepository.getTaskById(id);
+        if (task) {
+            return task;
+        } else {
+            // if task does not exist by id throw error
+            throw new Error('Task not found')
         }
     }
 }
