@@ -1,0 +1,20 @@
+@if(taskForm) {
+    <form (ngSubmit)="saveTask()" [formGroup]="taskForm" class="max-w-[500px] mx-auto mt-20 shadow px-8 py-12 rounded">
+        <h1 class="text-2xl font-bold mb-8">{{'New Task'}}</h1>
+        <div class="flex flex-col gap-5">
+            <section class="input">
+                <label class="input-label">{{'Title'}}</label>
+                <input formControlName="title" class="input-field rounded px-2 py-1" type="text">
+                <!-- <span class="text-sm text-red-400 mt-2">{{'This field is required'}}</span> -->
+            </section>
+    
+            <section class="input">
+                <label class="input-label">{{'Description'}}</label>
+                <textarea formControlName="description" class="border px-2 py-1 rounded"></textarea>
+                <!-- <span class="text-sm text-red-400 mt-2">{{'This field is required'}}</span> -->
+            </section>
+    
+            <button class="mt-3 bg-blue-500 hover:bg-opacity-25 text-white px-5 py-2 rounded-3xl ">{{'Save'}}</button>
+        </div>
+    </form>
+}

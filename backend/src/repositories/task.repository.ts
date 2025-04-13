@@ -1,19 +1,35 @@
 import { injectable } from "inversify";
 import { Task } from "../entities/task.entity";
 import { ICrudeRepository } from "../interfaces/ICrudeRespository";
+import { AppDataSource } from "../lib/typeorm/data-source";
+import { User } from "../entities/user.entity";
+
+const typeormRepo = AppDataSource.getRepository(Task)
 
 @injectable()
 export class TaskRepository implements ICrudeRepository<Task> {
-    addTask(data: any): Promise<Task> {
-        throw new Error("Method not implemented.");
+    async addTask(data: Task): Promise<Task> {
+        return typeormRepo.save(data)
     }
-    updateTask(itemId: number, data: any): Promise<Task> {
-        throw new Error("Method not implemented.");
+    async updateTask(taskId: number, data: any): Promise<Task> {
+        await typeormRepo.update({
+            id: taskId
+        }, data)
+
+        return (await typeormRepo.findOneBy({ id: taskId }))!
     }
-    deleteTask(data: any): Promise<void> {
-        throw new Error("Method not implemented.");
+    async deleteTask(id: number): Promise<void> {
+        await typeormRepo.delete({id})
+        return;
     }
-    getTasks(page: number, limit: number): Promise<Task[]> {
-        throw new Error("Method not implemented.");
+    async getTasks(page: number, limit: number): Promise<[Task[], number]> {
+        return typeormRepo.findAndCount({
+            skip: limit * page,
+            take: limit
+        })
+    }
+
+    async getTaskById(id: number): Promise<Task | null> {
+        return typeormRepo.findOneBy({ id })
     }
 }
