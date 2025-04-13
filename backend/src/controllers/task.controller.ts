@@ -3,6 +3,7 @@ import { ITaskInteractor } from "../interfaces/ITaskInteractor"
 import { inject, injectable } from "inversify";
 import { INTERFACE_TYPE } from "../utils/app.constant";
 import { Body, Controller, Delete, Get, Patch, Path, Post, Query, Route, SuccessResponse, Tags } from "tsoa";
+import { CreateTaskDTO } from "../dto/create-task.dto";
 
 @injectable()
 @Tags('Tasks')
@@ -18,7 +19,7 @@ export class TaskController extends Controller {
 
     @Post('/')
     @SuccessResponse('201', 'Created')
-    async onAddTask(@Body() data: any) {
+    async onAddTask(@Body() data: CreateTaskDTO) {
         try {
             const responseData = await this.taskInteractor.addTask(data);
             return responseData

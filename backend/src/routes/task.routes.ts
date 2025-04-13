@@ -25,7 +25,12 @@ taskRouter.patch('/:id', async (req: Request, resp: Response, next: NextFunction
     return taskController.onUpdateTask(+req.params.id, req.body);
 })
 taskRouter.post('/', async (req: Request, resp: Response, next: NextFunction) => {
-    return taskController.onAddTask(req.body);
+    try {
+        const responseData = await taskController.onAddTask(req.body);
+        resp.status(201).json(responseData)
+    } catch (error) {
+        next(error)
+    }
 })
 taskRouter.delete('/:id', async (req: Request, resp: Response, next: NextFunction) => {
     return taskController.onDeleteTask(+req.params.id);
