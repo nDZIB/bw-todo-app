@@ -9,6 +9,7 @@ import { NewTask } from '../../models/new-task.model';
   providedIn: 'root'
 })
 export class TasksService {
+
   readonly baseUrl = `${environment.baseUrl}/api/v1/tasks`
   constructor(private httpClient: HttpClient) { }
 
@@ -18,5 +19,13 @@ export class TasksService {
 
   addTask(data: NewTask) {
     return this.httpClient.post<Task>(`${this.baseUrl}`, data)
+  }
+
+  editTask(id: number, data: NewTask) {
+    return this.httpClient.patch<Task>(`${this.baseUrl}/${id}`, data)
+  }
+
+  deleteTask(id: number) {
+    return this.httpClient.delete<Task>(`${this.baseUrl}/${id}`)
   }
 }

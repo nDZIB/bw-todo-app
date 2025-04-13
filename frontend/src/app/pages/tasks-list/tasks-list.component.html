@@ -12,9 +12,12 @@
     <hr />
     <section class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
         @for (task of tasks; track task) {
-        <app-task [task]="task" />
+        <app-task
+         (delete)="deleteTask(task.id)"
+         (edit)="editTask(task)"
+         [task]="task" />
         } @empty {
-        <div class="min-h-[50vh] gap-4 flex flex-col items-center justify-center">
+        <div class="min-h-[50vh] col-span-full gap-4 flex flex-col items-center justify-center">
             <h2 class="text-center text-xl opacity-80 ">{{'You have no tasks at the moment'}}</h2>
             <a [routerLink]="['.', 'add']"
                 class="bg-blue-500 hover:bg-opacity-25 text-white px-5 py-2 rounded-3xl ">{{'Add Task'}}</a>

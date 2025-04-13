@@ -4,7 +4,7 @@ import { Task } from '../../models/task.model';
 import { TasksService } from '../../services/tasks/tasks.service';
 import { Page } from '../../models/page.mode';
 import { TaskComponent } from '../../components/task/task.component';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-tasks-list',
@@ -18,13 +18,28 @@ export class TasksListComponent implements OnInit {
   tasks: Task[] = []
 
   constructor(
-    private taskService: TasksService
-  ){}
+    private taskService: TasksService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
     this.taskService.getTasks().subscribe({
       next: (tasksPage: Page<Task>) => {
         this.tasks = tasksPage.data
+      }
+    })
+  }
+
+  editTask({title, description, id}: Task) {
+    this.router.navigate(['.', 'add'], {queryParams: {title, description, id}, relativeTo: this.activatedRoute})
+  }
+
+  
+  deleteTask(id: number) {
+    this.taskService.deleteTask(id).subscribe({
+      next: () => {
+        this.tasks = this.tasks.filter(task => task.id!==id)
       }
     })
   }
