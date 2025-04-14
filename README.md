@@ -65,6 +65,19 @@ Frontend Setup (tab 3)
 
 The frontend application will be accessible at http://localhost:4200 and the REST API's Swagger Documentation at http://localhost:8080/docs
 
+# How to use
+
+This ToDo application incorporates authentication. In order to manage todo tasks, a user must be authenticated,
+
+1. **Account Creation**: In order to create a new account, navigate to http://localhost:4200/sign-up . To create an account, a unique username and password are required
+2. **Login**: Once an account is created, a user can login by visiting http://localhost:4200/login . After successful login with username and password, a user is redirected to the tasks dashboard where tasks can be created.
+
+
+3. **Create a task**: To create a new todo, from the tasks dashboard, click "Add Task". A form is presented on which the user can provided the task's title and description and save
+4. **Delete a task**: To delete an existing task, from the tasks dashboard, click the 'Delete' button. After clicking, a suser needs to confirm the deletion. (this is to prevent users from accidentally deleting tasks)
+5. **Edit a task**: To update details of a created task, simply click on the "Edit" button on a todo task on the tasks dashboard. After updating fields accordingly, click on the save button.
+## Sign
+
 # Deployment to GCP
 In order to deploy this application to GCP, the following steps can be followed:
 
@@ -85,8 +98,9 @@ In order to deploy this application to GCP, the following steps can be followed:
 
 
 # Next steps
-- Validation
-- Error Handling
-- User Authentication
+- Improved User Authentication
+- Extensive filtering and pagination of tasks
 - Task Status and Due dates
 - Unit Testing
+- kanban-like presentation of tasks by status
+- Enhancement of user experience
