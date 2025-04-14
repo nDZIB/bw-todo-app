@@ -3,12 +3,13 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { Observable, Subscription } from 'rxjs';
 import { TasksService } from '../../services/tasks/tasks.service';
 import { Task } from '../../models/task.model';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router, RouterModule } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-add-task',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule, RouterModule],
   templateUrl: './add-task.component.html',
   styleUrl: './add-task.component.scss'
 })
@@ -16,6 +17,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = []
   taskForm?: FormGroup;
   taskId = 0;
+  errors: string[] = []
 
   constructor(
     private taskService: TasksService,
@@ -41,6 +43,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   }
 
   saveTask() {
+    this.taskForm?.markAllAsTouched()
     if (this.taskForm?.valid) {
       let apiCall: Observable<any>;
       if (!this.taskId) {
@@ -52,11 +55,23 @@ export class AddTaskComponent implements OnInit, OnDestroy {
       const subs = apiCall.subscribe({
         next: (response: Task) => {
           this.router.navigate(['..'], { relativeTo: this.activatedRoute })
+        },
+        error: (error: HttpErrorResponse) => {
+          if(error.error.error) {
+            this.errors = [error.error.error]
+          } else if(error.error.errors) {
+            this.errors = error.error.errors
+          }
         }
       })
 
       this.subscriptions.push(subs)
     }
+  }
+
+  hasError(controlName: string, validation: string) {
+    const control = this.taskForm?.get(controlName)
+    return ((control?.dirty || control?.touched)) && (control.errors && control.errors[validation])
   }
 
   ngOnDestroy(): void {
