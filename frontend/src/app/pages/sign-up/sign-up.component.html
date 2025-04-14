@@ -1,0 +1,41 @@
+<div class="bg-slate-50 min-h-[100vh] flex items-center px-6">
+    @if(loginForm) {
+        <form (ngSubmit)="signUp()" [formGroup]="loginForm" class="min-w-[25vw] max-w-[500px] mx-auto bg-white shadow px-8 py-12 rounded">
+            <div class="mb-4">
+                <h1 class="text-2xl font-bold">{{'Sign Up'}}</h1>
+                <p>Welcome! Create an account to get started</p>
+            </div>
+        
+            @if(errors.length) {
+            <ul class="errors p-4 mb-3 rounded-xl list-disc list-inside">
+                @for(error of errors; track error) {
+                <li>{{error}}</li>
+                }
+            </ul>
+            }
+        
+            <div class="flex flex-col gap-5">
+                <section class="input">
+                    <label class="input-label">{{'Username'}}</label>
+                    <input formControlName="username" class="input-field rounded px-2 py-1" type="text">
+                    @if(hasError('username', 'required')) {
+                    <p class="text-sm text-red-500 mt-2">{{'This field is required'}}</p>
+                    } 
+                </section>
+        
+                <section class="input">
+                    <label class="input-label">{{'Password'}}</label>
+                    <input formControlName="password" class="input-field rounded px-2 py-1" type="password">
+                    @if(hasError('password', 'required')) {
+                    <p class="text-sm text-red-500 mt-2">{{'This field is required'}}</p>
+                    } 
+                </section>
+        
+                <div class="mt-3 flex flex-col-reverse gap-4 lg:flex-row justify-between items-center">
+                    <button class="cursor-pointer" [routerLink]="['..', 'login']">{{'Already have an account'}}</button>
+                    <button class="bg-blue-500 hover:bg-opacity-25 text-white px-5 py-2 rounded-3xl ">{{'Create my Account'}}</button>
+                </div>
+            </div>
+        </form>
+        }
+</div>

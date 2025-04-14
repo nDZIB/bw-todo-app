@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { TasksService } from '../../services/tasks/tasks.service';
-import { Task } from '../../models/task.model';
 import { ActivatedRoute, ParamMap, Router, RouterModule } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Task } from '../../models/task.model';
 
 @Component({
   selector: 'app-add-task',
