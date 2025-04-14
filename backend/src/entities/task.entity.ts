@@ -1,14 +1,15 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
+import { User } from "./user.entity"
 
 @Entity()
 export class Task {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column({length: 255})
+    @Column({ length: 255 })
     title: string
 
-    @Column({type: 'text'})
+    @Column({ type: 'text' })
     description: string
 
     @CreateDateColumn()
@@ -16,4 +17,8 @@ export class Task {
 
     @UpdateDateColumn()
     updated_at: Date
+
+    @ManyToOne(() => User, user => user.tasks)
+    @JoinColumn({ name: 'userId' })
+    user: User
 }

@@ -5,6 +5,7 @@ import { TasksService } from '../../services/tasks/tasks.service';
 import { Page } from '../../models/page.mode';
 import { TaskComponent } from '../../components/task/task.component';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-tasks-list',
@@ -40,6 +41,9 @@ export class TasksListComponent implements OnInit {
     this.taskService.deleteTask(id).subscribe({
       next: () => {
         this.tasks = this.tasks.filter(task => task.id!==id)
+      },
+      error: (error: HttpErrorResponse) => {
+        alert(error.error.error)
       }
     })
   }

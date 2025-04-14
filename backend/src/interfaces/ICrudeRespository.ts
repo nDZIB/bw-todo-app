@@ -1,7 +1,11 @@
+import { FindOptions, FindOptionsWhere } from "typeorm";
+
 export interface ICrudeRepository<T> {
-    addTask(data: T): Promise<T>;
-    updateTask(id: number, data: any): Promise<T>;
-    deleteTask(id: number): Promise<void>;
-    getTasks(page: number, limit:number): Promise<[T[], number]>;
-    getTaskById(id: number): Promise<T|null>;
+    add(data: T): Promise<T>;
+    update(id: number, data: any): Promise<T>;
+    delete(id: number): Promise<void>;
+    getMany(page: number, limit:number): Promise<[T[], number]>;
+    getManyBy(page: number, limit:number, query: FindOptionsWhere<T>): Promise<[T[], number]>;
+    getById(id: number): Promise<T|null>;
+    getBy(query: FindOptionsWhere<T>): Promise<T|null>;
 }

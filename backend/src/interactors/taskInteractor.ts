@@ -7,33 +7,46 @@ import { CreateTaskDTO } from "../dto/create-task.dto";
 import { plainToClass } from "class-transformer";
 import { TaskDTO } from "../dto/task.dto";
 import { Paginated } from "../dto/paginated.dto";
+import { NotFoundError } from "../midleware/exceptions";
+import { UserInteractor } from "./userInteractor";
 
 @injectable()
 export class TaskInteractor implements ITaskInteractor {
     private taskRepository: ICrudeRepository<Task>;
+    private userInteractor: UserInteractor;
 
-    constructor(@inject(INTERFACE_TYPE.TaskRepository) taskRepository: ICrudeRepository<Task>) {
-        this.taskRepository = taskRepository
+    constructor(
+        @inject(INTERFACE_TYPE.TaskRepository) taskRepository: ICrudeRepository<Task>,
+        @inject(INTERFACE_TYPE.UserInteractor) userInteractor: UserInteractor
+    ) {
+        this.taskRepository = taskRepository;
+        this.userInteractor = userInteractor
     }
 
-    async addTask(data: CreateTaskDTO): Promise<TaskDTO> {
+    async addTask(data: CreateTaskDTO, user: number): Promise<TaskDTO> {
+        const userDetails = await this.userInteractor.getUserById(user);
         const task: Task = plainToClass(Task, data);
-        const savedTask = await this.taskRepository.addTask(task);
+        task.user = userDetails;
+        const savedTask = await this.taskRepository.add(task);
         return plainToClass(TaskDTO, savedTask);
     }
 
-    async updateTask(taskId: number, data: CreateTaskDTO): Promise<TaskDTO> {
-        await this.getTask(taskId);
-        const updatedTask = await this.taskRepository.updateTask(taskId, data);
+    async updateTask(taskId: number, data: CreateTaskDTO, user: number): Promise<TaskDTO> {
+        await this.getTask(taskId, user);
+        const updatedTask = await this.taskRepository.update(taskId, data);
         return plainToClass(TaskDTO, updatedTask);
     }
-    async deleteTask(taskId: number): Promise<void> {
-        const task = this.getTask(taskId);
-        await this.taskRepository.deleteTask(taskId);
+    async deleteTask(taskId: number, user: number): Promise<void> {
+        const task = await this.getTask(taskId, user);
+        await this.taskRepository.delete(taskId);
         return;
     }
-    async getTasks(page: number, limit: number): Promise<Paginated<TaskDTO>> {
-        const [tasks, total] = await this.taskRepository.getTasks(page, limit);
+    async getTasks(page: number, limit: number, user: number): Promise<Paginated<TaskDTO>> {
+        const [tasks, total] = await this.taskRepository.getManyBy(page, limit, {
+            user: {
+                id: user
+            }
+        });
         return {
             data: tasks.map(task => plainToClass(TaskDTO, task)),
             limit,
@@ -42,13 +55,18 @@ export class TaskInteractor implements ITaskInteractor {
         }
     }
 
-    private async getTask(id: number): Promise<Task> {
-        const task = await this.taskRepository.getTaskById(id);
+    private async getTask(id: number, userId: number): Promise<Task> {
+        const task = await this.taskRepository.getBy({
+            id: id,
+            user: {
+                id: userId
+            }
+        });
         if (task) {
             return task;
         } else {
             // if task does not exist by id throw error
-            throw new Error('Task not found')
+            throw new NotFoundError('Task not found')
         }
     }
 }

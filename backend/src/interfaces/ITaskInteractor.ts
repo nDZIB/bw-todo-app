@@ -3,8 +3,8 @@ import { Paginated } from "../dto/paginated.dto";
 import { TaskDTO } from "../dto/task.dto";
 
 export interface ITaskInteractor {
-    addTask(data: CreateTaskDTO): Promise<TaskDTO>;
-    updateTask(taskId: number, data: CreateTaskDTO): Promise<TaskDTO>;
-    deleteTask(id: number): Promise<void>;
-    getTasks(page: number, limit:number): Promise<Paginated<TaskDTO>>;
+    addTask(data: CreateTaskDTO, user: number): Promise<TaskDTO>;
+    updateTask(taskId: number, data: CreateTaskDTO, user: number): Promise<TaskDTO>;
+    deleteTask(id: number, user: number): Promise<void>;
+    getTasks(page: number, limit:number, user: number): Promise<Paginated<TaskDTO>>;
 }
