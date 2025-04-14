@@ -54,6 +54,8 @@ export class TaskController extends Controller {
             const responseData = await this.taskInteractor.deleteTask(taskId);
             return { task: responseData }
         } catch (error) {
+        console.log('In Controller', error);
+
             throw error;
         }
     }

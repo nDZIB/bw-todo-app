@@ -7,6 +7,7 @@ import { CreateTaskDTO } from "../dto/create-task.dto";
 import { plainToClass } from "class-transformer";
 import { TaskDTO } from "../dto/task.dto";
 import { Paginated } from "../dto/paginated.dto";
+import { NotFoundError } from "../midleware/exceptions";
 
 @injectable()
 export class TaskInteractor implements ITaskInteractor {
@@ -28,7 +29,7 @@ export class TaskInteractor implements ITaskInteractor {
         return plainToClass(TaskDTO, updatedTask);
     }
     async deleteTask(taskId: number): Promise<void> {
-        const task = this.getTask(taskId);
+        const task = await this.getTask(taskId);
         await this.taskRepository.deleteTask(taskId);
         return;
     }
@@ -48,7 +49,7 @@ export class TaskInteractor implements ITaskInteractor {
             return task;
         } else {
             // if task does not exist by id throw error
-            throw new Error('Task not found')
+            throw new NotFoundError('Task not found')
         }
     }
 }

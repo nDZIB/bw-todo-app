@@ -7,6 +7,8 @@ import { TaskInteractor } from '../interactors/taskInteractor';
 import { ICrudeRepository } from '../interfaces/ICrudeRespository';
 import { TaskRepository } from '../repositories/task.repository';
 import { Task } from '../entities/task.entity';
+import { validate } from '../midleware/validate.middleware';
+import { taskSchema } from '../dto/validation/task.schema';
 
 // setup D/I with inversify
 const container = new Container();
@@ -28,7 +30,7 @@ taskRouter.get('/', async (req: Request, resp: Response, next: NextFunction) => 
         next(error)
     }
 })
-taskRouter.patch('/:id', async (req: Request, resp: Response, next: NextFunction) => {
+taskRouter.patch('/:id', validate(taskSchema), async (req: Request, resp: Response, next: NextFunction) => {
     try {
         const responseData = await taskController.onUpdateTask(+req.params.id, req.body);
         resp.status(200).json(responseData)
@@ -36,7 +38,7 @@ taskRouter.patch('/:id', async (req: Request, resp: Response, next: NextFunction
         next(error)
     }
 })
-taskRouter.post('/', async (req: Request, resp: Response, next: NextFunction) => {
+taskRouter.post('/', validate(taskSchema), async (req: Request, resp: Response, next: NextFunction) => {
     try {
         const responseData = await taskController.onAddTask(req.body);
         resp.status(201).json(responseData)
@@ -49,6 +51,8 @@ taskRouter.delete('/:id', async (req: Request, resp: Response, next: NextFunctio
         const responseData = await taskController.onDeleteTask(+req.params.id);
         resp.status(204).json(responseData)
     } catch (error) {
+        console.log('In Route', error);
+        
         next(error)
     }
 })

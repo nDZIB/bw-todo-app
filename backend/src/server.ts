@@ -1,17 +1,16 @@
 import 'reflect-metadata'
 
-import express from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import taskRouter from './routes/task.routes';
 import Swagger from 'swagger-ui-express';
 import cors from 'cors';
 import { AppDataSource } from './lib/typeorm/data-source';
 import path from 'path';
+import { errorHandler } from './midleware/error-handler.middleware';
 
 const swaggerPath = process.env.DEPLOYMENT_ENV
     ? path.join(__dirname, './', 'swagger.json')
     : path.join(__dirname, '..', 'docs', 'swagger.json');
-
-
 
 const PORT = process.env.PORT || 8080;
 const app = express()
@@ -39,7 +38,4 @@ app.listen(PORT, () => {
     console.log(`TODO API running at :${PORT}`)
 })
 
-process.on('uncaughtException', async (err) => {
-    console.log(err);
-    process.exit(1)
-})
+app.use(errorHandler)
