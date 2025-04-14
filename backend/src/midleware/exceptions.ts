@@ -15,3 +15,11 @@ export class BusinessError extends Error {
     }
   }
 
+
+  export class AuthError extends Error {
+    code = 401;
+    constructor(message = 'UnAuthorised') {
+      super(message);
+      this.name = 'AuthorisationError';
+    }
+  }

@@ -7,6 +7,8 @@ import cors from 'cors';
 import { AppDataSource } from './lib/typeorm/data-source';
 import path from 'path';
 import { errorHandler } from './midleware/error-handler.middleware';
+import authRouter from './routes/auth.routes';
+import { verifyToken } from './midleware/verify-token.middleware';
 
 const swaggerPath = process.env.DEPLOYMENT_ENV
     ? path.join(__dirname, './', 'swagger.json')
@@ -22,7 +24,8 @@ app.use(cors({
     origin: allowedOrigins
 }))
 app.use(express.json())
-app.use('/api/v1/tasks', taskRouter)
+app.use('/api/v1/tasks', verifyToken, taskRouter)
+app.use('/api/v1/auth', authRouter)
 
 // configure swagger docs
 import(swaggerPath)
