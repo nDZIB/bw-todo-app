@@ -76,7 +76,10 @@ This ToDo application incorporates authentication. In order to manage todo tasks
 3. **Create a task**: To create a new todo, from the tasks dashboard, click "Add Task". A form is presented on which the user can provided the task's title and description and save
 4. **Delete a task**: To delete an existing task, from the tasks dashboard, click the 'Delete' button. After clicking, a suser needs to confirm the deletion. (this is to prevent users from accidentally deleting tasks)
 5. **Edit a task**: To update details of a created task, simply click on the "Edit" button on a todo task on the tasks dashboard. After updating fields accordingly, click on the save button.
-## Sign
+
+Attached is a short video walkthrough of the app
+[Screencast from 2025-04-14 15-33-42.webm](https://github.com/user-attachments/assets/188cee6b-810d-494e-9834-e748502ee1c9)
+
 
 # Deployment to GCP
 In order to deploy this application to GCP, the following steps can be followed:
