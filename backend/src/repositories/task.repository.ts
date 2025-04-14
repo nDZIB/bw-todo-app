@@ -12,6 +12,7 @@ export class TaskRepository implements ICrudeRepository<Task> {
     async add(data: Task): Promise<Task> {
         return typeormRepo.save(data)
     }
+
     async update(taskId: number, data: any): Promise<Task> {
         await typeormRepo.update({
             id: taskId
@@ -19,10 +20,12 @@ export class TaskRepository implements ICrudeRepository<Task> {
 
         return (await typeormRepo.findOneBy({ id: taskId }))!
     }
+
     async delete(id: number): Promise<void> {
         await typeormRepo.delete({id})
         return;
     }
+
     async getMany(page: number, limit: number): Promise<[Task[], number]> {
         return typeormRepo.findAndCount({
             skip: limit * page,
@@ -38,12 +41,12 @@ export class TaskRepository implements ICrudeRepository<Task> {
         })
     }
 
-    async getById(id: number): Promise<Task | null> {
-        return typeormRepo.findOneBy({ id })
+    getBy(query: FindOptionsWhere<Task>): Promise<Task | null> {
+        return typeormRepo.findOneBy(query)
     }
 
-    getBy(query: FindOptionsWhere<Task>): Promise<Task | null> {
-        throw new Error("Method not implemented.");
+    async getById(id: number): Promise<Task | null> {
+        return typeormRepo.findOneBy({ id })
     }
 
 }
